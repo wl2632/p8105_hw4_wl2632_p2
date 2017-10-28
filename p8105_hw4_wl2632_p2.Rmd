@@ -41,3 +41,5 @@ combined_data %>%
          ggtitle("GDP Value Over Presidency During 1947-2015") +
          ylab("GDP") + xlab("Month")
 ```
+
+From the plot, we can see that the years of GDP during "dem" varies larger than those years of GDP during "gop". The GDP during "gop" years tend to be more flat.
