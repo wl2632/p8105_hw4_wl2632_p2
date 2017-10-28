@@ -6,5 +6,25 @@ output: html_document
 ---
 
 ```{r}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(haven)
+library(rvest)
+library(stringr)
+library(forcats)
+library(ggridges)
+library(ggthemes)
+library(lubridate)
+pols_month = read.csv(file = "./data/pols-month.csv") %>%
+  clean_names() %>% 
+  mutate(mon = as.Date(mon,format = "%Y-%m-%d")) %>% 
+  mutate(first_day = lubridate::floor_date(mon, unit = "month"))
 
+gdp_data = read.csv(file = "./data/GDP.csv") %>%
+  clean_names() %>% 
+  mutate(date = as.Date(date,format = "%Y-%m-%d")) %>% 
+  mutate(first_day = lubridate::floor_date((date), unit = "month"))
+
+combined_data = left_join(pols_month, gdp_data, by = "first_day")
 ```
