@@ -4,8 +4,11 @@ author: "Weijie Liu"
 date: "October 27, 2017"
 output: html_document
 ---
+# Problem 2
 
-```{r}
+Clean and tidy the data as requested:
+
+```{r message=FALSE,warning=FALSE}
 library(tidyverse)
 library(readxl)
 library(janitor)
@@ -16,15 +19,25 @@ library(forcats)
 library(ggridges)
 library(ggthemes)
 library(lubridate)
-pols_month = read.csv(file = "./data/pols-month.csv") %>%
+pols_month = read_csv(file = "./data/pols-month.csv") %>%
   clean_names() %>% 
-  mutate(mon = as.Date(mon,format = "%Y-%m-%d")) %>% 
-  mutate(first_day = lubridate::floor_date(mon, unit = "month"))
+  mutate(month = lubridate::floor_date(mon, unit = "month"))
 
-gdp_data = read.csv(file = "./data/GDP.csv") %>%
+gdp_data = read_csv(file = "./data/GDP.csv") %>%
   clean_names() %>% 
-  mutate(date = as.Date(date,format = "%Y-%m-%d")) %>% 
-  mutate(first_day = lubridate::floor_date((date), unit = "month"))
+  mutate(month = lubridate::floor_date((date), unit = "month"))
 
-combined_data = left_join(pols_month, gdp_data, by = "first_day")
+combined_data = left_join(pols_month, gdp_data, by = "month")
+```
+
+The plot is shown as follows with the collaborator being Pengfei Jiang (pj2325).
+```{r message=FALSE, warning=FALSE}
+combined_data %>%
+  select(month, value, prez_dem) %>%
+  mutate(value = as.numeric(value)) %>%
+  mutate(prez_dem = factor(prez_dem, labels = c("gop", "dem"))) %>%
+  ggplot(aes(x = month, y = value, color = prez_dem)) + 
+         geom_bar(stat = "identity", aes(fill = prez_dem)) + 
+         ggtitle("GDP Value Over Presidency During 1947-2015") +
+         ylab("GDP") + xlab("Month")
 ```
