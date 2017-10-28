@@ -124,7 +124,50 @@ $(document).ready(function () {
 </div>
 
 
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## Loading tidyverse: ggplot2
+## Loading tidyverse: tibble
+## Loading tidyverse: tidyr
+## Loading tidyverse: readr
+## Loading tidyverse: purrr
+## Loading tidyverse: dplyr</code></pre>
+<pre><code>## Conflicts with tidy packages ----------------------------------------------</code></pre>
+<pre><code>## filter(): dplyr, stats
+## lag():    dplyr, stats</code></pre>
+<pre class="r"><code>library(readxl)
+library(janitor)
+library(haven)
+library(rvest)</code></pre>
+<pre><code>## Loading required package: xml2</code></pre>
+<pre><code>## 
+## Attaching package: 'rvest'</code></pre>
+<pre><code>## The following object is masked from 'package:purrr':
+## 
+##     pluck</code></pre>
+<pre><code>## The following object is masked from 'package:readr':
+## 
+##     guess_encoding</code></pre>
+<pre class="r"><code>library(stringr)
+library(forcats)
+library(ggridges)
+library(ggthemes)
+library(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: 'lubridate'</code></pre>
+<pre><code>## The following object is masked from 'package:base':
+## 
+##     date</code></pre>
+<pre class="r"><code>pols_month = read.csv(file = &quot;./data/pols-month.csv&quot;) %&gt;%
+  clean_names() %&gt;% 
+  mutate(mon = as.Date(mon,format = &quot;%Y-%m-%d&quot;)) %&gt;% 
+  mutate(first_day = lubridate::floor_date(mon, unit = &quot;month&quot;))
 
+gdp_data = read.csv(file = &quot;./data/GDP.csv&quot;) %&gt;%
+  clean_names() %&gt;% 
+  mutate(date = as.Date(date,format = &quot;%Y-%m-%d&quot;)) %&gt;% 
+  mutate(first_day = lubridate::floor_date((date), unit = &quot;month&quot;))
+
+combined_data = left_join(pols_month, gdp_data, by = &quot;first_day&quot;)</code></pre>
 
 
 
